@@ -6,6 +6,15 @@ const docQS = function (selector) {
 const docElId = function (selector) {
   return document.getElementById(selector);
 };
+
+const switchPlayer = function () {
+  docElId(`current--${activePlayer}`).textContent = 0;
+  currentScore = 0;
+  activePlayer = activePlayer === 0 ? 1 : 0;
+  player0El.classList.toggle("player--active");
+  player1El.classList.toggle("player--active");
+};
+
 //Selecting elements
 const player0El = docQS(".player--0");
 const player1El = docQS(".player--1");
@@ -16,7 +25,7 @@ const current1El = docElId("current--1");
 const diceEl = docQS(".dice");
 const btnNew = docQS(".btn--new");
 const btnRoll = docQS(".btn--roll");
-const btnHole = docQS(".btn--hold");
+const btnHold = docQS(".btn--hold");
 
 //Starting conditions
 score0El.textContent = 0;
@@ -41,10 +50,20 @@ btnRoll.addEventListener("click", function () {
     docElId(`current--${activePlayer}`).textContent = currentScore;
   } else {
     // Switch to next player
-    docElId(`current--${activePlayer}`).textContent = 0;
-    currentScore = 0;
-    activePlayer = activePlayer === 0 ? 1 : 0;
-    player0El.classList.toggle("player--active");
-    player1El.classList.toggle("player--active");
+    switchPlayer();
   }
+});
+
+btnHold.addEventListener("click", function () {
+  //1. Add current score to score to active player
+  scores[activePlayer] += currentScore;
+
+  //scores[1] = scores[1] + currentScore
+  docElId(`score--${activePlayer}`).textContent = scores[activePlayer];
+
+  //2. Check if player's score is >=100
+  // Finish the game
+
+  //Switch to the next player
+  switchPlayer();
 });
