@@ -7,14 +7,6 @@ const docElId = function (selector) {
   return document.getElementById(selector);
 };
 
-const switchPlayer = function () {
-  docElId(`current--${activePlayer}`).textContent = 0;
-  currentScore = 0;
-  activePlayer = activePlayer === 0 ? 1 : 0;
-  player0El.classList.toggle("player--active");
-  player1El.classList.toggle("player--active");
-};
-
 //Selecting elements
 const player0El = docQS(".player--0");
 const player1El = docQS(".player--1");
@@ -27,15 +19,35 @@ const btnNew = docQS(".btn--new");
 const btnRoll = docQS(".btn--roll");
 const btnHold = docQS(".btn--hold");
 
-//Starting conditions
-score0El.textContent = 0;
-score1El.textContent = 0;
-diceEl.classList.add("hidden");
+let scores, currentScore, activePlayer, playing;
 
-const scores = [0, 0]; //big scores
-let currentScore = 0;
-let activePlayer = 0;
-let playing = true;
+//Starting conditions
+const init = function () {
+  scores = [0, 0]; //big scores
+  currentScore = 0;
+  activePlayer = 0;
+  playing = true;
+
+  score0El.textContent = 0;
+  score1El.textContent = 0;
+  current0El.textContent = 0;
+  current1El.textContent = 0;
+
+  diceEl.classList.add("hidden");
+  player0El.classList.remove("player--winner");
+  player1El.classList.remove("player--winner");
+  player0El.classList.add("player--active");
+  player1El.classList.remove("player--active");
+};
+init();
+
+const switchPlayer = function () {
+  docElId(`current--${activePlayer}`).textContent = 0;
+  currentScore = 0;
+  activePlayer = activePlayer === 0 ? 1 : 0;
+  player0El.classList.toggle("player--active");
+  player1El.classList.toggle("player--active");
+};
 
 //Rolling dice functionality
 btnRoll.addEventListener("click", function () {
@@ -78,3 +90,5 @@ btnHold.addEventListener("click", function () {
     }
   }
 });
+
+btnNew.addEventListener("click", init);
